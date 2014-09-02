@@ -1,0 +1,10 @@
+<div class="modal-header">
+  <h3 class="modal-title">More Information</h3>
+</div>
+<div class="modal-body" id="text-editor">
+  <text-angular ng-model="additionalInfo"></text-angular>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button class="btn btn-success" ng-click="$close(additionalInfo)">Save</button>
+</div>

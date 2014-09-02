@@ -1,0 +1,61 @@
+<!-- <div id="overlay" class="container-fluid">
+  <div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">s</div>
+  </div>
+</div> -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 card-outer" id="sidebar">
+      <div class="card-inner" full-height>
+        <img src="assets/images/logo.png" class="img-responsive" id="logo">
+        <input type="text" id="search-bar" class="input-text" placeholder="Search by Firm Name" autofocus ng-model="search.firm.name" />
+        
+        <span class="hidden-sm hidden-xs">
+          <strong class="title">Types: </strong>
+          <ul id="types" class="multi-select">
+            <li ng-click="type.active = !type.active" ng-repeat="type in types">
+              <input type="checkbox" ng-checked="type.active">
+              <span>{{type.category}}</span>
+              <div class="clearfix"></div>
+            </li>
+          </ul>
+        </span>
+
+        <input type="text" 
+          id="search-bar" class="input-text hidden-sm hidden-xs" 
+          placeholder="Filter By Practice Areas" 
+          autofocus 
+          ng-model="input.category"
+          typeahead="category.category for category in categories | filter:$viewValue | limitTo:8"
+          typeahead-on-select="selectCategory($item, $model, $label)" />
+
+          <ul id="selected-areas">
+            <li ng-click="deselectCategory(category)" ng-repeat="category in selectedCategories" tooltip="Remove" tooltip-placement="right">{{category.category}}</li>
+          </ul>
+
+        <!-- <strong class="title" ng-show="search.categories.category">Matched Areas:</strong> -->
+        <!-- <ul id="practice-areas" class="multi-select" ng-show="search.categories.category">
+          <li ng-click="selectArea(category)" ng-repeat="category in (filteredCategories = (categories | filter: search.categories))">
+            <span>{{category.category}}</span>
+            <div class="clearfix"></div>
+          </li>
+
+          <li ng-show="filteredCategories.length < 1">
+            <span>No match found</span>
+          </li>
+        </ul> -->
+      </div>
+    </div>
+    <div class="col-md-5" id="search-result" full-height>
+      <strong class="column-title">Search results:</strong>
+      <div ng-show="filteredListing.length < 1" class="text-center">No match found</div>
+      <div ng-repeat="listing in (filteredListing = (listings | filter: search.firm | areas: selectedCategories:types | orderBy: 'name'))" bookmark="bookmark(l)" saved="isSaved(listing)" listing="listing"></div>
+    </div>
+    <div class="col-md-5 hidden-sm hidden-xs" id="saved" full-height>
+      <strong class="column-title">Bookmarked</strong>
+      <div ng-show="saved.length < 1" class="inverse-text text-center">No saved listing</div>
+      <div ng-repeat="listing in saved | orderBy: 'name'" unbookmark="unbookmark(l)" flag="true" listing="listing"></div>
+  </div>
+</div>

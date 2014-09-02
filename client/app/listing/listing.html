@@ -1,0 +1,65 @@
+<div class="result card-outer">
+  <div class="card-inner">
+    <strong class="firm-name">{{listing.name}}</strong>
+
+    <div class="entry">
+      <div class="field-label">Application Deadline:</div>
+      <div class="value">
+        {{listing.deadline | date: 'dd-MMM-yyyy'}}
+        <span ng-hide="listing.deadline">Not Listed</span>
+      </div>            
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="entry">
+      <div class="field-label">Type:</div>
+      <div class="value"><span class="label" ng-class="{'label-success': listing.type === 'Approved', 'label-primary': listing.type === 'Overseas', 'label-warning': listing.type === 'Need Approval' }">{{listing.type}}</span></div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="entry">
+      <div class="field-label">Contact:</div>
+      <div class="value">
+        <span ng-bind-html="listing.contact | linky"></span>
+        <span ng-hide="listing.contact">Not Listed</span>
+      </div>            
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="entry">
+      <div class="field-label">Period:</div>
+      <div class="value">
+        <div class="period" ng-repeat="period in listing.period">
+          {{period.start | date: 'dd-MMM-yyyy'}} to {{period.end | date: 'dd-MMM-yyyy'}}          
+        </div>
+        <span ng-show="listing.period.length < 1">Not Listed</span>
+      </div>            
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="entry">
+      <div class="field-label">Practice Areas:</div>
+      <div class="value">
+        <span ng-repeat="area in listing.practiceAreas" class="label label-category">{{area}}</span>
+        <span ng-show="listing.practiceAreas.length < 1">Not Listed</span>
+      </div>
+      <div class="clearfix"></div>
+    </div>    
+    
+    <div class="buttons">      
+      <button class="pull-right btn btn-save btn-sm" ng-hide="flag" ng-disabled="saved" ng-click="bookmark({ l: listing })">Bookmark</button>
+
+      <button class="pull-right btn btn-save btn-sm" ng-show="flag" ng-click="unbookmark({ l: listing })">Clear Bookmark</button>
+
+      <button class="pull-right btn btn-default btn-sm" ng-click="openInfo(listing)">More information</button>
+
+      <button class="pull-right btn btn-default btn-sm hidden-sm hidden-xs" 
+        style="margin-right: 10px;"
+        ng-click="getApproval()"
+        ng-show="listing.type === 'Need Approval'">
+        Request for Approval
+      </button>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>

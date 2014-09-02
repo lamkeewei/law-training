@@ -1,0 +1,178 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3" id="listing-panel" full-height>
+      <div class="btn-row">
+        <button class="btn btn-success pull-right btn-sm" ng-click="setNewListing()">Add New Listing</button>
+        <div class="clearfix"></div>
+      </div>
+
+      <input ng-model="search.firm.name" type="text" class="input-text" id="admin-search" placeholder="Search by Firm Name" />
+      <ul>
+        <li ng-click="selectListing(listing)" ng-class="{ 'active': listing.active }" ng-repeat="listing in listings | filter: search.firm | orderBy: 'name'">
+          <strong>{{listing.name}}</strong>
+          <p>Type: {{listing.type}}</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-5" id="listing-form" full-height>
+      <div class="btn-row text-right">
+        <button class="btn btn-sm btn-default" ng-click="resetSelected()" ng-show="isSelected">Reset</button>
+        <button class="btn btn-sm btn-danger" ng-show="isSelected" ng-click="delete()">Delete</button>
+        <button class="btn btn-sm btn-success" ng-show="isSelected" ng-click="save(form)" ng-disabled="form.$pristine">Save</button>
+        <button class="btn btn-sm btn-success" ng-hide="isSelected" ng-click="create(form)">Create</button>
+      </div>
+
+      <hr>
+
+      <form name="form" class="form-horizontal" role="form" novalidate>
+          <div class="form-group" ng-class="{'has-error': submitted && form.name.$error.required}">
+            <label class="col-md-3 control-label">Firm Name:</label>
+            <div class="col-md-8">
+              <input type="text" name="name" ng-model="currentListing.name" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': submitted && form.contact.$error.required}">
+            <label class="col-md-3 control-label">Contact:</label>
+            <div class="col-md-8">
+              <input type="text" name="contact" ng-model="currentListing.contact" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': submitted && form.type.$error.required}">
+            <label class="col-md-3 control-label">Type:</label>
+            <div class="col-md-8">
+              <select name="type" ng-model="currentListing.type" class="form-control" required>
+                <option>Approved</option>
+                <option>Overseas</option>
+                <option>Need Approval</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': submitted && form.deadline.$error.required}">
+            <label class="col-md-3 control-label">Deadline:</label>
+            <div class="col-md-8">
+              <div class="input-group">                
+                <input name="deadline" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.deadline" ng-model="currentListing.deadline" type="text" class="form-control" ng-disabled="true">
+                <span class="input-group-btn">
+                  <button class="btn btn-default extra-padding" ng-click="open($event, 'deadline')">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3">Additional Info</label>
+            <div class="col-md-8">
+              <button class="btn btn-success btn-sm" ng-hide="currentListing.additionalInfo" ng-click="launchInfoModal()">Create Information</button>
+              <button class="btn btn-primary btn-sm" ng-show="currentListing.additionalInfo" ng-click="launchInfoModal()">Edit Information</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3">Period:</label>
+            <div class="col-md-8" id="period">
+              <div class="dates">                
+                <div class="set-date" ng-repeat="period in currentListing.period">
+                  {{period.start | date: 'dd-MMM-yyyy'}} <span>to</span> {{period.end | date: 'dd-MMM-yyyy'}}
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="deletePeriod($index)" tooltip="Delete"></span>
+                </div>
+              </div>
+
+              <div ng-show="input.showPeriod" class="date-input">                
+                <div class="input-group" ng-class="{'has-error': input.periodError }">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.start" ng-model="input.period.start" class="form-control input-sm" ng-disabled="true" placeholder="Start Date">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'start')">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </button>
+                  </span>
+                </div>
+
+                <div class="input-group" ng-class="{'has-error': input.periodError }">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.end" ng-model="input.period.end" class="form-control input-sm" ng-disabled="true" placeholder="End Date">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'end')">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </button>
+                  </span>
+                </div>
+
+                <div class="cancel-ok">
+                  <span class="glyphicon glyphicon-ok-circle" ng-click="addPeriod()" tooltip="Add"></span>
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="cancelAddPeriod()" tooltip="Cancel"></span>
+                </div>
+
+                <div class="clearfix"></div>
+              </div>              
+
+              <button type="button" class="btn btn-link" ng-click="input.showPeriod = !input.showPeriod"><span class="glyphicon glyphicon-plus-sign"></span> Add Period</button>
+            </div>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': getNumAreas() < 1 && submitted }">
+            <label class="col-md-3 control-label">Practice Areas:</label>
+            <div class="col-md-8">
+              <div class="search-field">
+                <span class="glyphicon glyphicon-search"></span>  
+                <input type="text" placeholder="Search for Area" ng-model="input.areaFilter"/>    
+              </div>
+
+              <div class="new-area">
+                <a href="" ng-click="addNewCategory()"><span class="glyphicon glyphicon-plus-sign"></span> Add New Area</a>
+              </div>
+              
+              <div class="areas" ng-repeat="category in newCategories">
+                <input type="checkbox">
+                <input class="new-area-input" type="text" ng-model="input.newArea" />
+                <span tooltip="Add" ng-click="confirmAdd()" class="glyphicon glyphicon-ok-circle"></span>
+                <span tooltip="Cancel" ng-click="cancelAdd()" class="glyphicon glyphicon-remove-circle"></span>
+              </div>
+              
+              <div id="areas-list">
+                <label class="areas" ng-click="input.areaFilter = ''" ng-repeat="category in categories | filter: input.areaFilter | orderBy: '-selected'">
+                  <input type="checkbox" ng-model="category.selected">
+                  {{category.category}}
+                </label>                
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+
+    <div class="col-md-4" id="notification" full-height>
+      <div class="form-group">
+        <input type="text" id="approvals-filter" class="form-control" ng-model="filterRequests.$" placeholder="Filter">
+      </div>
+
+      <div class="form-group">
+        <select id="approval-status" ng-model="filterRequests.status" class="form-control">
+          <option value="">All</option>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+
+        <button class="btn btn-export pull-right">Export to Excel</button>
+      </div>      
+
+      <ul id="approvals-list">
+        <a ng-href="/approvals/status/{{approval._id}}" target="_blank" ng-repeat="approval in approvals | filter: filterRequests">          
+          <li class="approval"
+            ng-class="{ 'approved': approval.status === 'Approved', 'rejected': approval.status === 'Rejected' }">
+            <p>{{approval.studentName}} <span class="divider">applying for</span> {{approval.companyId.name}} <span class="divider">with</span> {{approval.supervisor}} <span class="divider">from</span> {{approval.start | date: 'dd/MM/yy'}} <span class="divider">to</span> {{approval.end | date: 'dd/MM/yy'}}</p>
+            <p class="options">
+              <button class="btn btn-link btn-xs" ng-click="deleteApproval($event, approval)">Delete</button>
+              <button ng-show="approval.status !== 'Rejected'" class="btn btn-danger btn-xs" ng-click="updateStatus($event, approval, 'Rejected')">Reject</button>
+              <button ng-show="approval.status !== 'Approved'" class="btn btn-success btn-xs" ng-click="updateStatus($event, approval, 'Approved')">Approve</button>
+            </p>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</div>

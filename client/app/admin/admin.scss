@@ -1,0 +1,293 @@
+$base-purple: #563d7c;
+$light-purple: #6f5499;
+$active-purple: #9c27b0;
+
+body {
+  overflow: hidden;
+}
+
+#listing-panel {
+  overflow-y: scroll;
+  background-color: $base-purple;
+  padding: 0px;
+  padding-left: 10px;
+  
+  .btn-row {
+    padding: 10px 0px;
+  }
+  ul {
+    list-style: none;
+    padding: 0px;
+    border-radius: 3px;
+  }
+  
+  li {
+    background-color: white;
+    cursor: pointer;
+    padding: 20px;
+    border-bottom: solid 1.5px rgba(0,0,0,0.1);
+    border-left: solid 6px rgba(0,0,0,0); 
+
+    strong {
+      font-size: 14pt;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: rgba(0,0,0,0.5);
+    }
+  }
+  
+  li:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  li:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
+  li:hover {
+    background-color: #F7F7F7;
+  }
+
+  li.active {
+    background-color: #F7F7F7;
+    border-left: solid 6px rgba(0,0,0,0.3); 
+  }
+}
+
+#notification {
+  background-color: rgba(0,0,0,0.8);
+  overflow-y: scroll;
+}
+
+#listing-form {
+  background-color: white;
+  overflow-y: scroll;
+  
+  .extra-padding {
+    padding-bottom: 7px;
+  }
+
+  td .btn-default,
+  th .btn-default {
+    border: 0px;
+  }
+
+  .input-group ul {
+    padding: 10px;
+  }
+
+  .input-group ul * {
+    outline: none;
+  }
+
+  button:active,
+  button:focus {
+    outline: none;
+  }
+
+  input,
+  select,
+  option {
+    font-weight: 300;
+  }
+
+  .btn-row {
+    margin: 20px 0px;
+  }
+
+  .form-group {
+    margin-bottom: 30px;
+  }
+
+  .areas {
+    display: block;
+    font-weight: 300;
+    margin-bottom: 10px;
+
+    input {
+      margin-right: 10px;
+    }
+
+    .glyphicon {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .glyphicon-ok-circle {
+      color: #4cae4c;
+    }
+    
+    .glyphicon-remove-circle {
+      color: #d9534f      
+    }
+  }
+
+  .new-area {
+    margin-bottom: 20px;
+  }
+
+  .new-area-input {
+    height: 25px;
+    padding: 5px;
+    border: solid 1px rgba(0,0,0,0.2);
+    border-radius: 2px;
+  }
+  
+  .search-field {
+    border-bottom: solid 2px rgba(0,0,0,0.2);    
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 250px;
+    
+    span {
+      display: inline-block;
+      margin-right: 10px;
+      color: rgba(0,0,0,0.4);
+    }
+    input{
+      border: none;
+      width: 80%;
+      padding: 5px 0px;
+    }
+  }
+}
+
+#period {
+  font-weight: 300;
+
+  .input-group {
+    width: 40%;
+    float: left;
+    margin-right: 2%;
+  } 
+  
+  .cancel-ok {
+    .glyphicon {
+      display: block;
+      float: left;
+      margin-right: 7.5px;
+      padding-top: 7.5px;
+      cursor: pointer;
+    }
+
+    .glyphicon-ok-circle {
+      color: #4cae4c;
+    }
+    
+    .glyphicon-remove-circle {
+      color: #d9534f      
+    }
+  }
+  
+  .set-date {
+    padding-bottom: 15px;
+    width: 100%;
+
+    span {
+      margin-left: 7.5px;
+      margin-right: 7.5px;
+    }
+
+    .glyphicon {
+      margin-left: 10px;
+      cursor: pointer;      
+    }
+  }
+
+  .date-input {
+    margin-bottom: 15px;
+  }
+
+  .btn-link {
+    padding-left: 0px;
+    display: block;
+  }
+}
+
+#areas-list {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+#notification {
+  overflow-y: scroll;
+  
+  .form-group {
+    margin-top: 20px;
+
+    input {
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 0px;
+      border: none;
+      color: white;
+    }
+
+    input:focus {
+      outline: 0px !important;
+      -webkit-appearance: none;
+    }    
+  }
+
+  .btn-export {
+    border-radius: 0px;
+    background-color: $light-purple;
+    color: white;
+  }
+
+  .btn-export:hover {
+    background-color: $active-purple;
+  }
+}
+
+#approvals-list {
+  list-style: none;
+  padding-left: 0px;
+
+  .approval {
+    color: black;
+    padding: 25px;
+    background: white;
+    width: 100%;
+    border-radius: 3px;
+    border-left: solid 5px $light-purple;
+    margin-bottom: 15px;
+
+    .options {
+      margin-top: 20px;
+      margin-bottom: 0px;
+      text-align: right;
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .approval.approved {
+    border-left: solid 5px #5CB85E;
+  }
+  
+  .approval.rejected {
+    border-left: solid 5px #d9534f;
+  }  
+
+  .divider {
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+    color: rgba(0,0,0,0.35);
+  }
+}
+
+#approval-status {
+  width: 50%;
+  display: inline-block;
+  background-color: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 0px;
+  color: rgba(255,255,255,0.9);
+}
