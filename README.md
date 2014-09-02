@@ -1,2 +1,2 @@
-law-internship
-==============
+law-training
+============
