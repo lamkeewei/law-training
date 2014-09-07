@@ -3,21 +3,6 @@
     <strong class="firm-name">{{listing.name}}</strong>
 
     <div class="entry">
-      <div class="field-label">Application Deadline:</div>
-      <div class="value">
-        {{listing.deadline | date: 'dd-MMM-yyyy'}}
-        <span ng-hide="listing.deadline">Not Listed</span>
-      </div>            
-      <div class="clearfix"></div>
-    </div>
-
-    <div class="entry">
-      <div class="field-label">Type:</div>
-      <div class="value"><span class="label" ng-class="{'label-success': listing.type === 'Approved', 'label-primary': listing.type === 'Overseas', 'label-warning': listing.type === 'Need Approval' }">{{listing.type}}</span></div>
-      <div class="clearfix"></div>
-    </div>
-
-    <div class="entry">
       <div class="field-label">Contact:</div>
       <div class="value">
         <span ng-bind-html="listing.contact | linky"></span>
@@ -27,9 +12,20 @@
     </div>
 
     <div class="entry">
-      <div class="field-label">Period:</div>
+      <div class="field-label">Application Period:</div>
       <div class="value">
-        <div class="period" ng-repeat="period in listing.period">
+        <div class="period" ng-repeat="period in listing.application">
+          {{period.start | date: 'dd-MMM-yyyy'}} to {{period.end | date: 'dd-MMM-yyyy'}}          
+        </div>
+        <span ng-show="listing.period.length < 1">Not Listed</span>
+      </div>            
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="entry">
+      <div class="field-label">Interview Period:</div>
+      <div class="value">
+        <div class="period" ng-repeat="period in listing.interview">
           {{period.start | date: 'dd-MMM-yyyy'}} to {{period.end | date: 'dd-MMM-yyyy'}}          
         </div>
         <span ng-show="listing.period.length < 1">Not Listed</span>
@@ -53,12 +49,6 @@
 
       <button class="pull-right btn btn-default btn-sm" ng-click="openInfo(listing)">More information</button>
 
-      <button class="pull-right btn btn-default btn-sm hidden-sm hidden-xs" 
-        style="margin-right: 10px;"
-        ng-click="getApproval()"
-        ng-show="listing.type === 'Need Approval'">
-        Request for Approval
-      </button>
     </div>
     <div class="clearfix"></div>
   </div>

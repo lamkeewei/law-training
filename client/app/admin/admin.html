@@ -10,7 +10,6 @@
       <ul>
         <li ng-click="selectListing(listing)" ng-class="{ 'active': listing.active }" ng-repeat="listing in listings | filter: search.firm | orderBy: 'name'">
           <strong>{{listing.name}}</strong>
-          <p>Type: {{listing.type}}</p>
         </li>
       </ul>
     </div>
@@ -40,31 +39,6 @@
             </div>
           </div>
 
-          <div class="form-group" ng-class="{'has-error': submitted && form.type.$error.required}">
-            <label class="col-md-3 control-label">Type:</label>
-            <div class="col-md-8">
-              <select name="type" ng-model="currentListing.type" class="form-control" required>
-                <option>Approved</option>
-                <option>Overseas</option>
-                <option>Need Approval</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" ng-class="{'has-error': submitted && form.deadline.$error.required}">
-            <label class="col-md-3 control-label">Deadline:</label>
-            <div class="col-md-8">
-              <div class="input-group">                
-                <input name="deadline" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.deadline" ng-model="currentListing.deadline" type="text" class="form-control" ng-disabled="true">
-                <span class="input-group-btn">
-                  <button class="btn btn-default extra-padding" ng-click="open($event, 'deadline')">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div class="form-group">
             <label class="control-label col-md-3">Additional Info</label>
             <div class="col-md-8">
@@ -74,43 +48,84 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-3">Period:</label>
+            <label class="control-label col-md-3">Application:</label>
             <div class="col-md-8" id="period">
               <div class="dates">                
-                <div class="set-date" ng-repeat="period in currentListing.period">
+                <div class="set-date" ng-repeat="period in currentListing.application">
                   {{period.start | date: 'dd-MMM-yyyy'}} <span>to</span> {{period.end | date: 'dd-MMM-yyyy'}}
-                  <span class="glyphicon glyphicon-remove-circle" ng-click="deletePeriod($index)" tooltip="Delete"></span>
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="deletePeriod($index, 'application')" tooltip="Delete"></span>
                 </div>
               </div>
 
-              <div ng-show="input.showPeriod" class="date-input">                
+              <div ng-show="input.showApplication" class="date-input">                
                 <div class="input-group" ng-class="{'has-error': input.periodError }">
-                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.start" ng-model="input.period.start" class="form-control input-sm" ng-disabled="true" placeholder="Start Date">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.applicationStart" ng-model="input.period.start" class="form-control input-sm" ng-disabled="true" placeholder="Start Date">
                   <span class="input-group-btn">
-                    <button class="btn btn-default btn-sm" ng-click="open($event, 'start')">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'applicationStart')">
                       <span class="glyphicon glyphicon-calendar"></span>
                     </button>
                   </span>
                 </div>
 
                 <div class="input-group" ng-class="{'has-error': input.periodError }">
-                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.end" ng-model="input.period.end" class="form-control input-sm" ng-disabled="true" placeholder="End Date">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.applicationEnd" ng-model="input.period.end" class="form-control input-sm" ng-disabled="true" placeholder="End Date">
                   <span class="input-group-btn">
-                    <button class="btn btn-default btn-sm" ng-click="open($event, 'end')">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'applicationEnd')">
                       <span class="glyphicon glyphicon-calendar"></span>
                     </button>
                   </span>
                 </div>
 
                 <div class="cancel-ok">
-                  <span class="glyphicon glyphicon-ok-circle" ng-click="addPeriod()" tooltip="Add"></span>
-                  <span class="glyphicon glyphicon-remove-circle" ng-click="cancelAddPeriod()" tooltip="Cancel"></span>
+                  <span class="glyphicon glyphicon-ok-circle" ng-click="addPeriod('application', 'showApplication')" tooltip="Add"></span>
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="cancelAddPeriod('showApplication')" tooltip="Cancel"></span>
                 </div>
 
                 <div class="clearfix"></div>
               </div>              
 
-              <button type="button" class="btn btn-link" ng-click="input.showPeriod = !input.showPeriod"><span class="glyphicon glyphicon-plus-sign"></span> Add Period</button>
+              <button type="button" class="btn btn-link" ng-click="input.showApplication = !input.showApplication"><span class="glyphicon glyphicon-plus-sign"></span> Add Period</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3">Interview:</label>
+            <div class="col-md-8" id="period">
+              <div class="dates">                
+                <div class="set-date" ng-repeat="period in currentListing.interview">
+                  {{period.start | date: 'dd-MMM-yyyy'}} <span>to</span> {{period.end | date: 'dd-MMM-yyyy'}}
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="deletePeriod($index, 'interview')" tooltip="Delete"></span>
+                </div>
+              </div>
+
+              <div ng-show="input.showInterview" class="date-input">                
+                <div class="input-group" ng-class="{'has-error': input.periodError }">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.interviewStart" ng-model="input.period.start" class="form-control input-sm" ng-disabled="true" placeholder="Start Date">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'interviewStart')">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </button>
+                  </span>
+                </div>
+
+                <div class="input-group" ng-class="{'has-error': input.periodError }">
+                  <input type="text" name="end" datepicker-popup='dd-MMM-yyyy' datepicker-options="datepickerOptions" is-open="openFlags.interviewEnd" ng-model="input.period.end" class="form-control input-sm" ng-disabled="true" placeholder="End Date">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" ng-click="open($event, 'interviewEnd')">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </button>
+                  </span>
+                </div>
+
+                <div class="cancel-ok">
+                  <span class="glyphicon glyphicon-ok-circle" ng-click="addPeriod('interview', 'showInterview')" tooltip="Add"></span>
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="cancelAddPeriod('showInterview')" tooltip="Cancel"></span>
+                </div>
+
+                <div class="clearfix"></div>
+              </div>              
+
+              <button type="button" class="btn btn-link" ng-click="input.showInterview = !input.showInterview"><span class="glyphicon glyphicon-plus-sign"></span> Add Period</button>
             </div>
           </div>
 
@@ -144,35 +159,7 @@
       </form>
     </div>
 
-    <div class="col-md-4" id="notification" full-height>
-      <div class="form-group">
-        <input type="text" id="approvals-filter" class="form-control" ng-model="filterRequests.$" placeholder="Filter">
-      </div>
-
-      <div class="form-group">
-        <select id="approval-status" ng-model="filterRequests.status" class="form-control">
-          <option value="">All</option>
-          <option>Pending</option>
-          <option>Approved</option>
-          <option>Rejected</option>
-        </select>
-
-        <button class="btn btn-export pull-right">Export to Excel</button>
-      </div>      
-
-      <ul id="approvals-list">
-        <a ng-href="/approvals/status/{{approval._id}}" target="_blank" ng-repeat="approval in approvals | filter: filterRequests">          
-          <li class="approval"
-            ng-class="{ 'approved': approval.status === 'Approved', 'rejected': approval.status === 'Rejected' }">
-            <p>{{approval.studentName}} <span class="divider">applying for</span> {{approval.companyId.name}} <span class="divider">with</span> {{approval.supervisor}} <span class="divider">from</span> {{approval.start | date: 'dd/MM/yy'}} <span class="divider">to</span> {{approval.end | date: 'dd/MM/yy'}}</p>
-            <p class="options">
-              <button class="btn btn-link btn-xs" ng-click="deleteApproval($event, approval)">Delete</button>
-              <button ng-show="approval.status !== 'Rejected'" class="btn btn-danger btn-xs" ng-click="updateStatus($event, approval, 'Rejected')">Reject</button>
-              <button ng-show="approval.status !== 'Approved'" class="btn btn-success btn-xs" ng-click="updateStatus($event, approval, 'Approved')">Approve</button>
-            </p>
-          </li>
-        </a>
-      </ul>
+    <div class="col-md-4" id="notification" full-height>      
     </div>
   </div>
 </div>

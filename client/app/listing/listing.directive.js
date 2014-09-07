@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lawInternshipApp')
-  .directive('listing', function ($modal, Listing, Approval, $window) {
+  .directive('listing', function ($modal, Listing, $window) {
     return {
       templateUrl: 'app/listing/listing.html',
       restrict: 'EA',
@@ -24,29 +24,6 @@ angular.module('lawInternshipApp')
                 return Listing.get({ id: id }).$promise;
               }
             }
-          });
-        };
-
-        scope.getApproval = function(){
-          var modalInstance = $modal.open({
-            templateUrl: 'app/approval/approval.html',
-            controller: 'ApprovalCtrl',
-            resolve: {
-              listing: function(){
-                var id = scope.listing._id;
-                return Listing.get({ id: id }).$promise;
-              }
-            }
-          });
-
-          modalInstance.result.then(function(approval){
-            Approval.save(approval, function(){
-              new $window.PNotify({
-                type: 'success',
-                title: 'Application Submitted',
-                text: 'Please check your email for confirmation'
-              });
-            });
           });
         };
       }

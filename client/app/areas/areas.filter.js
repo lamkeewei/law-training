@@ -2,7 +2,7 @@
 
 angular.module('lawInternshipApp')
   .filter('areas', function ($filter, $log) {
-    return function (listings, categories, types) {
+    return function (listings, categories) {
       var filtered;
 
       if (categories.length > 0) {        
@@ -25,18 +25,6 @@ angular.module('lawInternshipApp')
       } else {
         filtered = listings;
       }
-
-      types = _.filter(types, { active: true });
-      filtered = _.filter(filtered, function(listing){
-        var contain = false;
-        angular.forEach(types, function(t){
-          if (listing.type === t.category) {
-            contain = true;
-          }
-        });
-
-        return contain;
-      });
 
       return filtered;
     };

@@ -6,10 +6,12 @@ var mongoose = require('mongoose'),
 var ListingSchema = new Schema({
   name: String,
   contact: String,
-  type: String,
-  deadline: Date,
   additionalInfo: String,
-  period: [{
+  application: [{
+    start: Date,
+    end: Date
+  }],
+  interview: [{
     start: Date,
     end: Date
   }],

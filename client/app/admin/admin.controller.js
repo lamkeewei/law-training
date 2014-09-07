@@ -1,12 +1,10 @@
 'use strict';
 
 angular.module('lawInternshipApp')
-  .controller('AdminCtrl', function ($scope, $http, Listing, _, PNotify, Auth, $location, $modal, approvals, Approval, $window) {
+  .controller('AdminCtrl', function ($scope, $http, Listing, _, PNotify, Auth, $location, $modal, $window) {
     if (!Auth.isAdmin()) {
       $location.path('/login');
     }
-
-    $scope.approvals = approvals;
 
     $scope.input = {
       period: {}
@@ -16,7 +14,8 @@ angular.module('lawInternshipApp')
       firm: {}
     };
     $scope.newListing = {
-      period: []
+      application: [],
+      interview: []
     };
 
     $scope.datepickerOptions = {
@@ -107,7 +106,8 @@ angular.module('lawInternshipApp')
       $scope.submitted = false;
       $scope.form.$setPristine();
       $scope.cancelAdd();
-      $scope.cancelAddPeriod();
+      $scope.cancelAddPeriod('showInterview');
+      $scope.cancelAddPeriod('showApplication');
     };
 
     $scope.open = function(e, field){
@@ -140,7 +140,8 @@ angular.module('lawInternshipApp')
       var id = $scope.currentListing._id;
       $scope.currentListing = Listing.get({ id: id });
       $scope.currentListing = angular.copy(original);
-      $scope.cancelAddPeriod();
+      $scope.cancelAddPeriod('showInterview');
+      $scope.cancelAddPeriod('showApplication');
       $scope.submitted = false;
     };
 
@@ -193,7 +194,8 @@ angular.module('lawInternshipApp')
           });
 
           $scope.form.$setPristine();
-          $scope.cancelAddPeriod();
+          $scope.cancelAddPeriod('showInterview');
+          $scope.cancelAddPeriod('showApplication');
         });
       }
     };
@@ -203,25 +205,25 @@ angular.module('lawInternshipApp')
       return active.length;
     };
 
-    $scope.addPeriod = function(){
+    $scope.addPeriod = function(field, displayToggle){
       if (!$scope.input.period.start || !$scope.input.period.end) {
         $scope.input.periodError = true;
         return;
       }
 
-      $scope.currentListing.period.push($scope.input.period);
-      $scope.cancelAddPeriod();
+      $scope.currentListing[field].push($scope.input.period);
+      $scope.cancelAddPeriod(displayToggle);
     };
 
-    $scope.cancelAddPeriod = function(){
+    $scope.cancelAddPeriod = function(field){
       $scope.input.period = {};
-      $scope.input.showPeriod = false;
+      $scope.input[field] = false;
       $scope.input.periodError = false;
     };
 
-    $scope.deletePeriod = function(index){
+    $scope.deletePeriod = function(index, field){
       $scope.form.$setDirty();
-      $scope.currentListing.period.splice(index, 1);
+      $scope.currentListing[field].splice(index, 1);
     };
 
     $scope.launchInfoModal = function(){
@@ -240,65 +242,6 @@ angular.module('lawInternshipApp')
       modalInstance.result.then(function(additionalInfo){
         $scope.form.$setDirty();
         $scope.currentListing.additionalInfo = additionalInfo;
-      });
-    };
-
-    $scope.updateStatus = function(event, approval, status){
-      event.stopPropagation();
-      event.preventDefault();
-
-      var update = function() {
-        approval.status = status;
-        approval.companyId = approval.companyId._id;
-
-        Approval.update({ id: approval._id }, approval, function(){
-          new $window.PNotify({
-            type: 'success',
-            text: 'Request successfully ' + status.toLowerCase() + '!',
-            title: status
-          });
-        });
-      };
-
-      if (status === 'Rejected') {
-        var modalInstance = $modal.open({
-          template: '<div class="modal-header"><h3>Reason for Rejection</h3></div>\
-          <div class="modal-body">\
-            <form name="reasonForm">\
-              <div class="form-group">\
-                <textarea placeholder="Enter reason..." style="resize: none; height: 200px;" class="form-control" ng-model="reason"></textarea>\
-              </div>\
-            </form>\
-          </div>\
-          <div class="modal-footer">\
-            <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>\
-            <button class="btn btn-success" ng-disabled="!reason" ng-click="$close(reason)">Done</button>\
-          </div>'
-        });
-
-        modalInstance.result.then(function(reason){
-          approval.reason = reason;
-          update();
-        });
-      } else {
-        update();
-      }
-    };
-
-    $scope.deleteApproval = function(event, approval){
-      event.stopPropagation();
-      event.preventDefault();
-
-      Approval.delete({id: approval._id}, function(){
-        _.remove($scope.approvals, function(el){
-          return el._id === approval._id;
-        });
-
-        new $window.PNotify({
-          type: 'success',
-          text: 'Request successfully deleted!',
-          title: 'Request deleted.'
-        });
       });
     };
   });

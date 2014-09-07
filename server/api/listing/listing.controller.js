@@ -38,9 +38,8 @@ exports.update = function(req, res) {
 
     listing.name = newListing.name;
     listing.contact = newListing.contact;
-    listing.type = newListing.type;
-    listing.deadline = newListing.deadline;
-    listing.period = newListing.period;
+    listing.application = newListing.application;
+    listing.interview = newListing.interview;
     listing.additionalInfo = newListing.additionalInfo;
     listing.practiceAreas = newListing.practiceAreas;
 
